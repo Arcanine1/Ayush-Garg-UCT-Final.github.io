@@ -4,7 +4,10 @@ Ayush Garg’s undergraduate complexity theory final project. The website curren
 
 ## Editing
 
-- Edit `index.html` to change the title, outline, or content. Each planned chapter has its own labeled `<section>`. Add paragraphs, images, or links inside that section as the project develops.
+- `index.html`: topics 1–2, introduction and quantum circuits.
+- `models-and-complexity.html`: topics 3–5, quantum Turing machines, model equivalence and BQP, and complexity comparisons.
+- `algorithm-and-references.html`: topics 6–7, Shor’s algorithm and conclusion/references.
+- Each planned chapter has its own labeled `<section>`. Add paragraphs, images, or links inside that section as the project develops. Shared headers and navigation are plain HTML in each page; update all three if you change them.
 - Edit `styles.css` to change the appearance. Colors are defined at the top.
 - Put future images in an `images/` folder and use relative paths such as `images/circuit.svg`.
 
