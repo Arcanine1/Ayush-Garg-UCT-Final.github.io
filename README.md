@@ -1,13 +1,13 @@
 # Quantum Computation & Complexity
 
-Ayush Garg’s undergraduate complexity theory final project. The website currently contains the title and proposed outline; full content will be added later.
+Ayush Garg’s undergraduate complexity theory final project. The website contains the lecture notes, worked examples, and diagrams.
 
 ## Editing
 
 - `index.html`: topics 1–2, introduction and quantum circuits.
 - `models-and-complexity.html`: topics 3–5, quantum Turing machines, model equivalence and BQP, and complexity comparisons.
 - `algorithm-and-references.html`: topics 6–7, Shor’s algorithm and conclusion/references.
-- Each planned chapter has its own labeled `<section>`. Add paragraphs, images, or links inside that section as the project develops. Shared headers and navigation are plain HTML in each page; update all three if you change them.
+- Each chapter has its own labeled `<section>`. Add paragraphs, images, or links inside that section as the project develops. Shared headers and navigation are plain HTML in each page; update all three if you change them.
 - The left sidebar links to all three pages and their subsections. When adding a section, give it a unique `id` and add its link to the sidebar in all three HTML files.
 - Edit `styles.css` to change the appearance. Colors are defined at the top.
 - Put future images in an `images/` folder and use relative paths such as `images/circuit.svg`.

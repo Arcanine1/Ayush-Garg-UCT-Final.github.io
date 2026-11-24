@@ -58,3 +58,35 @@ footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16
   footer { padding: 24px; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* Reading layout for equations, definitions, and worked examples. */
+:root { --topbar: 56px; --sidebar: clamp(245px, 22vw, 310px); }
+.lecture-header { background: #fff; border-bottom: 1px solid #ddd; padding-bottom: 26px; }
+.notes-body { max-width: 950px; }
+section { font-family: Georgia, "Times New Roman", serif; font-size: 1.1rem; line-height: 1.65; }
+section p { font-size: inherit; line-height: inherit; margin: 0 0 1em; }
+section h2, section h3, summary { font-family: system-ui, sans-serif; }
+section h3 { font-size: 1.16rem; font-weight: 600; margin: 1.8em 0 .65em; }
+.definition { background: #fcfcf3; border: 1px solid #e5e4d9; border-left: 3px solid #a04a50; box-shadow: 0 2px 3px #2221; padding: 16px 20px; margin: 20px 0; }
+.definition p:first-child > strong:first-child { color: #902d36; }
+.definition p:last-child, details p:last-child { margin-bottom: 0; }
+math[display="block"] { display: block math; overflow-x: auto; padding: .45em 0; margin: .55em 0; }
+section figure { margin: 24px 0; padding: 18px clamp(12px,3vw,32px); border-block: 1px solid #d6e2df; background: #f7faf9; }
+figure img { display: block; width: 100%; max-width: 540px; margin: auto; }
+figcaption { color: #42565a; font: .94rem/1.5 system-ui,sans-serif; margin-top: 12px; }
+.containment div { text-align: center; font-size: clamp(1rem,2.8vw,1.7rem); }
+section details { margin: 1.3rem 0; border-block: 1px solid #dadedd; padding: 12px 0; }
+section summary { color: #8c2937; font-weight: 600; cursor: pointer; }
+section details[open] summary { margin-bottom: 14px; }
+pre { font: .92rem/1.6 monospace; background: #f1f5f6; overflow-x: auto; padding: 14px; }
+@media(max-width:760px) {
+  .sidebar { display:none; }
+  .lecture-header { padding-top:24px; }
+  .notes-body { padding-inline:18px; }
+  section:target { padding-left:0; border:none; }
+}
+@media print {
+  .topbar,.sidebar,.reading-nav,footer,.skip-link { display:none; }
+  .reading-pane { margin:0; }
+  .definition,figure { break-inside:avoid; }
+}
