@@ -1,35 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Ayush Garg’s complexity theory final project: lecture notes on quantum computation and BQP.">
+  <meta name="description"
+    content="Ayush Garg’s complexity theory final project: lecture notes on quantum computation and BQP.">
   <title>Models &amp; complexity | Ayush Garg</title>
   <link rel="stylesheet" href="styles.css?v=quantum-notes-2">
 </head>
+
 <body>
   <a class="skip-link" href="#outline">Skip to lecture notes</a>
   <header class="topbar">
     <a class="brand" href="index.html">Quantum Complexity</a>
-    <details class="lecture-menu"><summary>Lecture notes</summary><div class="menu-links"><a href="index.html">Foundations &amp; circuits</a><a href="models-and-complexity.html" aria-current="page">Models &amp; complexity</a><a href="algorithm-and-references.html">Algorithm &amp; references</a></div></details>
+    <details class="lecture-menu">
+      <summary>Lecture notes</summary>
+      <div class="menu-links"><a href="index.html">Foundations &amp; circuits</a><a href="models-and-complexity.html"
+          aria-current="page">Models &amp; complexity</a><a href="algorithm-and-references.html">Algorithm &amp;
+          references</a></div>
+    </details>
   </header>
   <aside class="sidebar">
     <h2>Lecture notes</h2>
     <nav aria-label="Lecture notes">
-<div class="nav-group"><a class="lecture-link" href="index.html">Foundations &amp; circuits</a><ul class="section-links">
-<li><a href="index.html#introduction"><span>1</span>Introduction &amp; quantum foundations</a></li>
-<li><a href="index.html#quantum-circuits"><span>2</span>Quantum circuits</a></li>
-</ul></div>
-<div class="nav-group"><a class="lecture-link" href="models-and-complexity.html" aria-current="page">Models &amp; complexity</a><ul class="section-links">
-<li><a href="models-and-complexity.html#quantum-turing-machines"><span>3</span>Quantum Turing machines</a></li>
-<li><a href="models-and-complexity.html#equivalence-and-bqp"><span>4</span>Model equivalence &amp; BQP</a></li>
-<li><a href="models-and-complexity.html#complexity-landscape"><span>5</span>BQP in the complexity landscape</a></li>
-</ul></div>
-<div class="nav-group"><a class="lecture-link" href="algorithm-and-references.html">Algorithm &amp; references</a><ul class="section-links">
-<li><a href="algorithm-and-references.html#quantum-algorithm"><span>6</span>An algorithm in focus: Shor’s algorithm</a></li>
-<li><a href="algorithm-and-references.html#conclusion-and-references"><span>7</span>Conclusion &amp; references</a></li>
-</ul></div>
-</nav>
+      <div class="nav-group"><a class="lecture-link" href="index.html">Foundations &amp; circuits</a>
+        <ul class="section-links">
+          <li><a href="index.html#introduction"><span>1</span>Introduction &amp; quantum foundations</a></li>
+          <li><a href="index.html#quantum-circuits"><span>2</span>Quantum circuits</a></li>
+        </ul>
+      </div>
+      <div class="nav-group"><a class="lecture-link" href="models-and-complexity.html" aria-current="page">Models &amp;
+          complexity</a>
+        <ul class="section-links">
+          <li><a href="models-and-complexity.html#quantum-turing-machines"><span>3</span>Quantum Turing machines</a>
+          </li>
+          <li><a href="models-and-complexity.html#equivalence-and-bqp"><span>4</span>Model equivalence &amp; BQP</a>
+          </li>
+          <li><a href="models-and-complexity.html#complexity-landscape"><span>5</span>BQP in the complexity
+              landscape</a></li>
+        </ul>
+      </div>
+      <div class="nav-group"><a class="lecture-link" href="algorithm-and-references.html">Algorithm &amp; references</a>
+        <ul class="section-links">
+          <li><a href="algorithm-and-references.html#quantum-algorithm"><span>6</span>An algorithm in focus: Shor’s
+              algorithm</a></li>
+          <li><a href="algorithm-and-references.html#conclusion-and-references"><span>7</span>Conclusion &amp;
+              references</a></li>
+        </ul>
+      </div>
+    </nav>
   </aside>
   <div class="reading-pane">
     <main id="outline">
@@ -41,83 +61,965 @@
       </header>
       <div class="notes-body">
 
-      <ol class="chapters" start="3" style="--chapter-start: 2">
-        <li><section id="quantum-turing-machines" aria-labelledby="machines-title">
-          <h2 id="machines-title"><a href="#quantum-turing-machines">Quantum Turing machines</a></h2>
-<h3 id="definition-of-a-quantum-tm">Definition of a quantum TM</h3>
-<div class="definition">
-<p><strong>Definition (Quantum Turing machine)</strong></p>
-<p>A quantum Turing machine (QTM) M is a 7-tuple</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>Q</mi><mo>,</mo><mi>Σ</mi><mo>,</mo><mi>Γ</mi><mo>,</mo><mi>δ</mi><mo>,</mo><msub><mi>q</mi><mn>0</mn></msub><mo>,</mo><msub><mi>q</mi><mrow><mi mathvariant="normal">a</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">c</mi></mrow></msub><mo>,</mo><msub><mi>q</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">j</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">M=(Q,\Sigma,\Gamma,\delta,q_0,q_{\mathrm{acc}},q_{\mathrm{rej}}),</annotation></semantics></math></p>
-<p>where</p>
-<ul>
-<li>Q is a nonempty finite set of internal states.</li>
-<li>Σ is a nonempty finite input alphabet that excludes the blank symbol ⊔.</li>
-<li>Γ is a finite tape alphabet containing both Σ and the blank symbol ⊔.</li>
-<li>q₀ ∈ Q is the initial state.</li>
-<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>q</mi><mrow><mi mathvariant="normal">a</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">c</mi></mrow></msub><annotation encoding="application/x-tex">q_{\mathrm{acc}}</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>q</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">j</mi></mrow></msub><annotation encoding="application/x-tex">q_{\mathrm{rej}}</annotation></semantics></math> ∈ Q are distinct states called the accepting state and the rejecting state, respectively.</li>
-<li>δ is the transition amplitude function</li>
-</ul>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>:</mo><mi>Q</mi><mo>×</mo><mi>Γ</mi><mo>×</mo><mi>Q</mi><mo>×</mo><mi>Γ</mi><mo>×</mo><mo stretchy="false" form="prefix">{</mo><mi>L</mi><mo>,</mo><mi>R</mi><mo stretchy="false" form="postfix">}</mo><mo>→</mo><mi>ℂ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\delta:Q\times\Gamma\times Q\times\Gamma\times\{L,R\}\longrightarrow\mathbb C.</annotation></semantics></math></p>
-<p>If the machine is in state q and reads symbol a, then δ(q, a, q′, b, d) is the amplitude for entering state q′, writing symbol b, and moving the tape head in direction d.</p>
-<p>A configuration C specifies the internal state, the tape contents, and the head position. The machine can be in a superposition of configurations,</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">|</mo><mi>ψ</mi><mo stretchy="true" form="postfix">⟩</mo></mrow><mo>=</mo><munder><mo>∑</mo><mi>C</mi></munder><msub><mi>α</mi><mi>C</mi></msub><mrow><mo stretchy="true" form="prefix">|</mo><mi>C</mi><mo stretchy="true" form="postfix">⟩</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><munder><mo>∑</mo><mi>C</mi></munder><msup><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>α</mi><mi>C</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow><mn>2</mn></msup><mo>=</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\left\lvert \psi\right\rangle=\sum_C\alpha_C\left\lvert C\right\rangle,\qquad \sum_C|\alpha_C|^2=1.</annotation></semantics></math></p>
-<p>To apply the transition rule, consider each configuration C in the current superposition. Suppose C has amplitude <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mi>C</mi></msub><annotation encoding="application/x-tex">\alpha_C</annotation></semantics></math>, internal state q, and symbol a under its head. For each possible move (q′, b, d), let C′ be the configuration obtained by writing b, entering state q′, and moving the head in direction d. This move contributes amplitude <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mi>C</mi></msub><annotation encoding="application/x-tex">\alpha_C</annotation></semantics></math> δ(q, a, q′, b, d) to C′. The new amplitude of C′ is the sum of all contributions that reach it. Applying this rule to the entire superposition counts as one step. The transition table must induce a unitary transformation on the space of configurations. This ensures that the squared magnitudes of the configuration amplitudes still sum to 1. For the time bounds below, we assume the transition amplitudes can be approximated to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math> bits in time polynomial in <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math>.</p>
-</div>
-<p>To decide a language, we use a fixed running time T(n) for inputs of length n. On input x, the machine starts in state q₀ with x on its tape. After T (|x|) steps, we require that every configuration with nonzero amplitude has internal state <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>q</mi><mrow><mi mathvariant="normal">a</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">c</mi></mrow></msub><annotation encoding="application/x-tex">q_{\mathrm{acc}}</annotation></semantics></math> or <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>q</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">j</mi></mrow></msub><annotation encoding="application/x-tex">q_{\mathrm{rej}}</annotation></semantics></math> (otherwise the TM has not halted). We then measure the internal state. If <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mi>C</mi></msub><annotation encoding="application/x-tex">\alpha_C</annotation></semantics></math> is the final amplitude of configuration C, the acceptance probability is</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Pr</mo><mrow><mo stretchy="true" form="prefix">[</mo><mi>M</mi><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> accepts </mtext><mspace width="0.333em"></mspace></mrow><mi>x</mi><mo stretchy="true" form="postfix">]</mo></mrow><mo>=</mo><munder><mo>∑</mo><mrow><mi>C</mi><mo>:</mo><mspace width="0.167em"></mspace><mi>q</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>C</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msub><mi>q</mi><mrow><mi mathvariant="normal">a</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">c</mi></mrow></msub></mrow></munder><msup><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>α</mi><mi>C</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow><mn>2</mn></msup><mo>,</mo></mrow><annotation encoding="application/x-tex">\Pr[M\text{ accepts }x]=\sum_{C:\,q(C)=q_{\mathrm{acc}}}|\alpha_C|^2,</annotation></semantics></math></p>
-<p>where q(C) denotes the internal state of C.</p>
-<p>As a note this means that <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>q</mi><mrow><mi mathvariant="normal">a</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">c</mi></mrow></msub><annotation encoding="application/x-tex">q_{\mathrm{acc}}</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>q</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">j</mi></mrow></msub><annotation encoding="application/x-tex">q_{\mathrm{rej}}</annotation></semantics></math> are no longer sink states as they are in a normal TM so during the computation it is possible for the probability of observing the accepting state to decrease which is not possible in a classical TM.</p>
-<h3 id="quantum-tm-running-time">Quantum TM running time</h3>
-<p>Naturally, we can define the running time of a quantum Turing machine by counting how many times it applies its transition rule. In our fixed-time model, the algorithm specifies a function T : N → N. On every input x of length n, the machine takes exactly T(n) steps, measures its internal state, and halts. Each application of the transition rule counts as one step, even when the machine is in a superposition of many configurations.</p>
-<div class="definition">
-<p><strong>Definition (Bounded-error quantum time)</strong></p>
-<p>A language L belongs to BQTIME(f (n)) if there exists a quantum Turing machine M that runs in time T(n) = O(f (n)) and decides L with bounded error. That is, for every input x,</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>∈</mo><mi>L</mi><mo>⟹</mo><mo>Pr</mo><mrow><mo stretchy="true" form="prefix">[</mo><mi>M</mi><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> accepts </mtext><mspace width="0.333em"></mspace></mrow><mi>x</mi><mo stretchy="true" form="postfix">]</mo></mrow><mo>≥</mo><mfrac displaystyle="false"><mn>2</mn><mn>3</mn></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mi>x</mi><mo>∉</mo><mi>L</mi><mo>⟹</mo><mo>Pr</mo><mrow><mo stretchy="true" form="prefix">[</mo><mi>M</mi><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> accepts </mtext><mspace width="0.333em"></mspace></mrow><mi>x</mi><mo stretchy="true" form="postfix">]</mo></mrow><mo>≤</mo><mfrac displaystyle="false"><mn>1</mn><mn>3</mn></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">x\in L\implies \Pr[M\text{ accepts }x]\ge\tfrac23,\qquad x\notin L\implies\Pr[M\text{ accepts }x]\le\tfrac13.</annotation></semantics></math></p>
-<p>Here the time bound includes the cost of keeping track of when to measure.</p>
-</div>
-<p>Interestingly we can see (and will soon prove) that the equivalent of P for BQTIME is actually equal to BQP that we defined earlier for circuits.</p>
-<div class="definition">
-<p><strong>Definition (BQP via quantum Turing machines)</strong></p>
-<p>BQP is the class of languages that a quantum Turing machine can decide in polynomial time with bounded error. Equivalently,</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">B</mi><mi mathvariant="normal">Q</mi><mi mathvariant="normal">P</mi></mrow><mo>=</mo><munderover><mo>⋃</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mo accent="false">∞</mo></munderover><mrow><mi mathvariant="normal">B</mi><mi mathvariant="normal">Q</mi><mi mathvariant="normal">T</mi><mi mathvariant="normal">I</mi><mi mathvariant="normal">M</mi><mi mathvariant="normal">E</mi></mrow><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>n</mi><mi>k</mi></msup><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathrm{BQP}=\bigcup_{k=1}^\infty\mathrm{BQTIME}(n^k).</annotation></semantics></math></p>
-</div>
-</section></li>
-        <li><section id="equivalence-and-bqp" aria-labelledby="bqp-title">
-          <h2 id="bqp-title"><a href="#equivalence-and-bqp">Model equivalence &amp; BQP</a></h2>
-<p>It is not immediately obvious how the two definitions of BQP are equivalent so we will show their equivalence below:</p>
-<h3 id="mathrmbqp_mathrmgate-mathrmbqp_mathrmtm"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mrow><mi mathvariant="normal">B</mi><mi mathvariant="normal">Q</mi><mi mathvariant="normal">P</mi></mrow><mrow><mi mathvariant="normal">G</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">e</mi></mrow></msub><annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{Gate}}</annotation></semantics></math> ⊆ <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mrow><mi mathvariant="normal">B</mi><mi mathvariant="normal">Q</mi><mi mathvariant="normal">P</mi></mrow><mrow><mi mathvariant="normal">T</mi><mi mathvariant="normal">M</mi></mrow></msub><annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{TM}}</annotation></semantics></math></h3>
-<p>Let L be a language such that L ∈ <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mrow><mi mathvariant="normal">B</mi><mi mathvariant="normal">Q</mi><mi mathvariant="normal">P</mi></mrow><mrow><mi mathvariant="normal">G</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">e</mi></mrow></msub><annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{Gate}}</annotation></semantics></math>. We therefore know we can create the quantum circuit that solves L in polynomial time with bounded error since <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mrow><mi mathvariant="normal">B</mi><mi mathvariant="normal">Q</mi><mi mathvariant="normal">P</mi></mrow><mrow><mi mathvariant="normal">G</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">e</mi></mrow></msub><annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{Gate}}</annotation></semantics></math> covers polynomial-time uniform circuits. Now our QTM can first create the circuit in polynomial time. Then it can create a scratchpad with the input and work qubits and simulate the circuit. Applying a quantum gate takes at worst linear time over the number of q-bits (which itself must be polynomial with respect to the input). This is since we simply have to scan the tape and find the bits we need and apply the necessary computations. H and T are easy and the qubit can be directly modified. For CNOT we can have the TM coherently enter one of two internal states depending on the value of the control qubit and then modify the target bit differently depending on which of the two states it is in, then undo the temporary copy of the control.</p>
-<p>We see that circuit evaluation is polynomial since there are polynomial number of gates and each of them take polynomial time to execute. Therefore this whole process is in polynomial time and we are guaranteed that the circuit we generated is within error bounds so L ∈ <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mrow><mi mathvariant="normal">B</mi><mi mathvariant="normal">Q</mi><mi mathvariant="normal">P</mi></mrow><mrow><mi mathvariant="normal">T</mi><mi mathvariant="normal">M</mi></mrow></msub><annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{TM}}</annotation></semantics></math>.</p>
-<h3 id="mathrmbqp_mathrmtm-mathrmbqp_mathrmgate"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mrow><mi mathvariant="normal">B</mi><mi mathvariant="normal">Q</mi><mi mathvariant="normal">P</mi></mrow><mrow><mi mathvariant="normal">T</mi><mi mathvariant="normal">M</mi></mrow></msub><annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{TM}}</annotation></semantics></math> ⊆ <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mrow><mi mathvariant="normal">B</mi><mi mathvariant="normal">Q</mi><mi mathvariant="normal">P</mi></mrow><mrow><mi mathvariant="normal">G</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">e</mi></mrow></msub><annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{Gate}}</annotation></semantics></math></h3>
-<p>Note we won’t go over this whole proof in detail as it is quite advanced, but we will give a sketch. Let L be a language such that L ∈ <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mrow><mi mathvariant="normal">B</mi><mi mathvariant="normal">Q</mi><mi mathvariant="normal">P</mi></mrow><mrow><mi mathvariant="normal">T</mi><mi mathvariant="normal">M</mi></mrow></msub><annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{TM}}</annotation></semantics></math>, so it has a time bound T(n) which is polynomial. To show that this is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mrow><mi mathvariant="normal">B</mi><mi mathvariant="normal">Q</mi><mi mathvariant="normal">P</mi></mrow><mrow><mi mathvariant="normal">G</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">e</mi></mrow></msub><annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{Gate}}</annotation></semantics></math> we will use a very similar approach to efficient TM to circuits. Using the same grid diagram we see that the relevant work tape is of length O(n + T(n)), which is polynomial. We also see that the length of computation is T(n) which is also polynomial. Now we can use our transition function to build a reversible circuit for one time step. As in the classical grid, each cell is affected only by its own cell and its two neighbors above. Unlike in the classical case we can not just say that this is a constant number of gates since the transition function can output continuous values, which might require an infinite number of basic gates to simulate exactly.</p>
-<details open><summary>Gate approximation</summary>
-<p>To solve this while maintaining our bounded error bound we use boosting to bring our algorithm with perfect gates to a lower error rate. Then we can approximate each transition with a polynomial size circuit with small enough error per transition that our final circuit still has error at most 1/3. This allows L ∈ <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mrow><mi mathvariant="normal">B</mi><mi mathvariant="normal">Q</mi><mi mathvariant="normal">P</mi></mrow><mrow><mi mathvariant="normal">G</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">e</mi></mrow></msub><annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{Gate}}</annotation></semantics></math></p>
-</details>
-<p>By combining both of these results we can see that <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mrow><mi mathvariant="normal">B</mi><mi mathvariant="normal">Q</mi><mi mathvariant="normal">P</mi></mrow><mrow><mi mathvariant="normal">G</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">e</mi></mrow></msub><annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{Gate}}</annotation></semantics></math> = <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mrow><mi mathvariant="normal">B</mi><mi mathvariant="normal">Q</mi><mi mathvariant="normal">P</mi></mrow><mrow><mi mathvariant="normal">T</mi><mi mathvariant="normal">M</mi></mrow></msub><annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{TM}}</annotation></semantics></math></p>
-</section></li>
-        <li><section id="complexity-landscape" aria-labelledby="landscape-title">
-          <h2 id="landscape-title"><a href="#complexity-landscape">BQP in the complexity landscape</a></h2>
-<p>In fitting with our goal of using quantum computers to expand the domain of which problems are efficiently solvable, this section will include what we know about how BQP fits into the complexity hierarchy.</p>
-<figure class="containment">
-<div>
-P ⊆ BPP ⊆ BQP ⊆ PSPACE
-</div>
-<figcaption>
-Read from left to right. Each inclusion is proved. The chain makes no claim that adjacent classes differ.
-</figcaption>
-</figure>
-<h3 id="p-bpp-bqp">P ⊆ BPP ⊆ BQP</h3>
-<p>To see this it suffices to show that BPP ⊆ BQP. Let L ∈ BPP we therefore know it has some polynomial time bound T(n) and for all x the probability of success must be at least 2/3. This means that probability of success across all random choices for a given x must be at least 2/3. To show that there exists a quantum algorithm we could have our QTM enter a quantum superposition for both outcomes at every random choice made, keeping each random bit on its own wire so different random choices cannot interfere. After simulating T(n) steps reversibly, we could measure and probability of success must be at least 2/3. Therefore L ∈ BQP</p>
-<h3 id="bqp-pspace">BQP ⊆ PSPACE</h3>
-<p>While it might be immediately clear that BQP ⊆ EXP since one could just keep track of every possible configuration’s amplitude and perform updates (this is one way people simulate quantum computers in the real world), it might be surprising to see that BQP ⊆ PSPACE. The general idea to this is that we compute one amplitude at a time by working backward through the circuit.</p>
-<p>Let L ∈ BQP. Given an input x, we know that in polynomial time we can generate the polynomial sized circuit <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>C</mi><mrow><mo stretchy="true" form="prefix">|</mo><mi>x</mi><mo stretchy="true" form="postfix">|</mo></mrow></msub><annotation encoding="application/x-tex">C_{|x|}</annotation></semantics></math>. Suppose the circuit has q qubits and applies the gates G₁,…, Gₘ in order, where q and m are also polynomial sized. Let A(i, y) be the amplitude of the basis state |y⟩ after the first i gates. We will compute one amplitude at a time by working backward through the circuit.</p>
-<p>Suppose we want to compute A(i, y). Write <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>U</mi><mi>i</mi></msub><annotation encoding="application/x-tex">U_i</annotation></semantics></math> for the matrix of gate <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>G</mi><mi>i</mi></msub><annotation encoding="application/x-tex">G_i</annotation></semantics></math>. Since Uᵢ is unitary, its inverse is Uᵢ†. Apply this inverse gate to the basis state whose amplitude we want:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>U</mi><mi>i</mi><mo>†</mo></msubsup><mrow><mo stretchy="true" form="prefix">|</mo><mi>y</mi><mo stretchy="true" form="postfix">⟩</mo></mrow><mo>=</mo><munder><mo>∑</mo><mi>z</mi></munder><msub><mi>c</mi><mi>z</mi></msub><mrow><mo stretchy="true" form="prefix">|</mo><mi>z</mi><mo stretchy="true" form="postfix">⟩</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>c</mi><mi>z</mi></msub><mo>=</mo><mover><msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>U</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>y</mi><mo>,</mo><mi>z</mi></mrow></msub><mo accent="true">¯</mo></mover><mi>.</mi></mrow><annotation encoding="application/x-tex">U_i^\dagger\left\lvert y\right\rangle=\sum_z c_z\left\lvert z\right\rangle,\qquad c_z=\overline{(U_i)_{y,z}}.</annotation></semantics></math></p>
-<p>Thus each nonzero <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>c</mi><mi>z</mi></msub><annotation encoding="application/x-tex">c_z</annotation></semantics></math> identifies a basis state |z⟩ that can contribute to |y⟩ through the forward gate Uᵢ. Its contribution is its previous amplitude A(i − 1, z) multiplied by the forward transition amplitude <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>U</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>y</mi><mo>,</mo><mi>z</mi></mrow></msub><mo>=</mo><mover><msub><mi>c</mi><mi>z</mi></msub><mo accent="true">¯</mo></mover></mrow><annotation encoding="application/x-tex">(U_i)_{y,z}=\overline{c_z}</annotation></semantics></math>. Summing these contributions gives</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>i</mi><mo>,</mo><mi>y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><munder><mo>∑</mo><mi>z</mi></munder><msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>U</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>y</mi><mo>,</mo><mi>z</mi></mrow></msub><mi>A</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo>,</mo><mi>z</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><munder><mo>∑</mo><mrow><mi>z</mi><mo>:</mo><msub><mi>c</mi><mi>z</mi></msub><mo>≠</mo><mn>0</mn></mrow></munder><mover><msub><mi>c</mi><mi>z</mi></msub><mo accent="true">¯</mo></mover><mi>A</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo>,</mo><mi>z</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">A(i,y)=\sum_z (U_i)_{y,z}A(i-1,z)=\sum_{z:c_z\ne0}\overline{c_z}A(i-1,z).</annotation></semantics></math></p>
-<details open><summary>This gives the following recursive algorithm.</summary>
-<pre class="text"><code>Amplitude(i, y):
+        <ol class="chapters" start="3" style="--chapter-start: 2">
+          <li>
+            <section id="quantum-turing-machines" aria-labelledby="machines-title">
+              <h2 id="machines-title"><a href="#quantum-turing-machines">Quantum Turing machines</a></h2>
+              <h3 id="definition-of-a-quantum-tm">Definition of a quantum TM</h3>
+              <div class="definition">
+                <p><strong>Definition (Quantum Turing machine)</strong></p>
+                <p>A quantum Turing machine (QTM) M is a 7-tuple</p>
+                <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow>
+                        <mi>M</mi>
+                        <mo>=</mo>
+                        <mrow>
+                          <mo stretchy="true" form="prefix">(</mo>
+                          <mi>Q</mi>
+                          <mo>,</mo>
+                          <mi>Σ</mi>
+                          <mo>,</mo>
+                          <mi>Γ</mi>
+                          <mo>,</mo>
+                          <mi>δ</mi>
+                          <mo>,</mo>
+                          <msub>
+                            <mi>q</mi>
+                            <mn>0</mn>
+                          </msub>
+                          <mo>,</mo>
+                          <msub>
+                            <mi>q</mi>
+                            <mrow>
+                              <mi mathvariant="normal">a</mi>
+                              <mi mathvariant="normal">c</mi>
+                              <mi mathvariant="normal">c</mi>
+                            </mrow>
+                          </msub>
+                          <mo>,</mo>
+                          <msub>
+                            <mi>q</mi>
+                            <mrow>
+                              <mi mathvariant="normal">r</mi>
+                              <mi mathvariant="normal">e</mi>
+                              <mi mathvariant="normal">j</mi>
+                            </mrow>
+                          </msub>
+                          <mo stretchy="true" form="postfix">)</mo>
+                        </mrow>
+                        <mo>,</mo>
+                      </mrow>
+                      <annotation encoding="application/x-tex">
+                        M=(Q,\Sigma,\Gamma,\delta,q_0,q_{\mathrm{acc}},q_{\mathrm{rej}}),</annotation>
+                    </semantics>
+                  </math></p>
+                <p>where</p>
+                <ul>
+                  <li>Q is a nonempty finite set of internal states.</li>
+                  <li>Σ is a nonempty finite input alphabet that excludes the blank symbol ⊔.</li>
+                  <li>Γ is a finite tape alphabet containing both Σ and the blank symbol ⊔.</li>
+                  <li>q₀ ∈ Q is the initial state.</li>
+                  <li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                      <semantics>
+                        <msub>
+                          <mi>q</mi>
+                          <mrow>
+                            <mi mathvariant="normal">a</mi>
+                            <mi mathvariant="normal">c</mi>
+                            <mi mathvariant="normal">c</mi>
+                          </mrow>
+                        </msub>
+                        <annotation encoding="application/x-tex">q_{\mathrm{acc}}</annotation>
+                      </semantics>
+                    </math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                      <semantics>
+                        <msub>
+                          <mi>q</mi>
+                          <mrow>
+                            <mi mathvariant="normal">r</mi>
+                            <mi mathvariant="normal">e</mi>
+                            <mi mathvariant="normal">j</mi>
+                          </mrow>
+                        </msub>
+                        <annotation encoding="application/x-tex">q_{\mathrm{rej}}</annotation>
+                      </semantics>
+                    </math> ∈ Q are distinct states called the accepting state and the rejecting state, respectively.
+                  </li>
+                  <li>δ is the transition amplitude function</li>
+                </ul>
+                <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow>
+                        <mi>δ</mi>
+                        <mo>:</mo>
+                        <mi>Q</mi>
+                        <mo>×</mo>
+                        <mi>Γ</mi>
+                        <mo>×</mo>
+                        <mi>Q</mi>
+                        <mo>×</mo>
+                        <mi>Γ</mi>
+                        <mo>×</mo>
+                        <mo stretchy="false" form="prefix">{</mo>
+                        <mi>L</mi>
+                        <mo>,</mo>
+                        <mi>R</mi>
+                        <mo stretchy="false" form="postfix">}</mo>
+                        <mo>→</mo>
+                        <mi>ℂ</mi>
+                        <mi>.</mi>
+                      </mrow>
+                      <annotation encoding="application/x-tex">\delta:Q\times\Gamma\times
+                        Q\times\Gamma\times\{L,R\}\longrightarrow\mathbb C.</annotation>
+                    </semantics>
+                  </math></p>
+                <p>If the machine is in state q and reads symbol a, then δ(q, a, q′, b, d) is the amplitude for entering
+                  state q′, writing symbol b, and moving the tape head in direction d.</p>
+                <p>A configuration C specifies the internal state, the tape contents, and the head position. The machine
+                  can be in a superposition of configurations,</p>
+                <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow>
+                        <mrow>
+                          <mo stretchy="true" form="prefix">|</mo>
+                          <mi>ψ</mi>
+                          <mo stretchy="true" form="postfix">⟩</mo>
+                        </mrow>
+                        <mo>=</mo>
+                        <munder>
+                          <mo>∑</mo>
+                          <mi>C</mi>
+                        </munder>
+                        <msub>
+                          <mi>α</mi>
+                          <mi>C</mi>
+                        </msub>
+                        <mrow>
+                          <mo stretchy="true" form="prefix">|</mo>
+                          <mi>C</mi>
+                          <mo stretchy="true" form="postfix">⟩</mo>
+                        </mrow>
+                        <mo>,</mo>
+                        <mspace width="2.0em"></mspace>
+                        <munder>
+                          <mo>∑</mo>
+                          <mi>C</mi>
+                        </munder>
+                        <msup>
+                          <mrow>
+                            <mo stretchy="true" form="prefix">|</mo>
+                            <msub>
+                              <mi>α</mi>
+                              <mi>C</mi>
+                            </msub>
+                            <mo stretchy="true" form="postfix">|</mo>
+                          </mrow>
+                          <mn>2</mn>
+                        </msup>
+                        <mo>=</mo>
+                        <mn>1</mn>
+                        <mi>.</mi>
+                      </mrow>
+                      <annotation encoding="application/x-tex">\left\lvert \psi\right\rangle=\sum_C\alpha_C\left\lvert
+                        C\right\rangle,\qquad \sum_C|\alpha_C|^2=1.</annotation>
+                    </semantics>
+                  </math></p>
+                <p>To apply the transition rule, consider each configuration C in the current superposition. Suppose C
+                  has amplitude <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <msub>
+                        <mi>α</mi>
+                        <mi>C</mi>
+                      </msub>
+                      <annotation encoding="application/x-tex">\alpha_C</annotation>
+                    </semantics>
+                  </math>, internal state q, and symbol a under its head. For each possible move (q′, b, d), let C′ be
+                  the configuration obtained by writing b, entering state q′, and moving the head in direction d. This
+                  move contributes amplitude <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <msub>
+                        <mi>α</mi>
+                        <mi>C</mi>
+                      </msub>
+                      <annotation encoding="application/x-tex">\alpha_C</annotation>
+                    </semantics>
+                  </math> δ(q, a, q′, b, d) to C′. The new amplitude of C′ is the sum of all contributions that reach
+                  it. Applying this rule to the entire superposition counts as one step. The transition table must
+                  induce a unitary transformation on the space of configurations. This ensures that the squared
+                  magnitudes of the configuration amplitudes still sum to 1. For the time bounds below, we assume the
+                  transition amplitudes can be approximated to <math display="inline"
+                    xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mi>b</mi>
+                      <annotation encoding="application/x-tex">b</annotation>
+                    </semantics>
+                  </math> bits in time polynomial in <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mi>b</mi>
+                      <annotation encoding="application/x-tex">b</annotation>
+                    </semantics>
+                  </math>.</p>
+              </div>
+              <p>To decide a language, we use a fixed running time T(n) for inputs of length n. On input x, the machine
+                starts in state q₀ with x on its tape. After T(|x|) steps, we require that every configuration with
+                nonzero amplitude has internal state <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mi>q</mi>
+                      <mrow>
+                        <mi mathvariant="normal">a</mi>
+                        <mi mathvariant="normal">c</mi>
+                        <mi mathvariant="normal">c</mi>
+                      </mrow>
+                    </msub>
+                    <annotation encoding="application/x-tex">q_{\mathrm{acc}}</annotation>
+                  </semantics>
+                </math> or <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mi>q</mi>
+                      <mrow>
+                        <mi mathvariant="normal">r</mi>
+                        <mi mathvariant="normal">e</mi>
+                        <mi mathvariant="normal">j</mi>
+                      </mrow>
+                    </msub>
+                    <annotation encoding="application/x-tex">q_{\mathrm{rej}}</annotation>
+                  </semantics>
+                </math> (otherwise the TM has not halted). We then measure the internal state. If <math display="inline"
+                  xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mi>α</mi>
+                      <mi>C</mi>
+                    </msub>
+                    <annotation encoding="application/x-tex">\alpha_C</annotation>
+                  </semantics>
+                </math> is the final amplitude of configuration C, the acceptance probability is</p>
+              <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow>
+                      <mo>Pr</mo>
+                      <mrow>
+                        <mo stretchy="true" form="prefix">[</mo>
+                        <mi>M</mi>
+                        <mrow>
+                          <mspace width="0.333em"></mspace>
+                          <mtext mathvariant="normal"> accepts </mtext>
+                          <mspace width="0.333em"></mspace>
+                        </mrow>
+                        <mi>x</mi>
+                        <mo stretchy="true" form="postfix">]</mo>
+                      </mrow>
+                      <mo>=</mo>
+                      <munder>
+                        <mo>∑</mo>
+                        <mrow>
+                          <mi>C</mi>
+                          <mo>:</mo>
+                          <mspace width="0.167em"></mspace>
+                          <mi>q</mi>
+                          <mrow>
+                            <mo stretchy="true" form="prefix">(</mo>
+                            <mi>C</mi>
+                            <mo stretchy="true" form="postfix">)</mo>
+                          </mrow>
+                          <mo>=</mo>
+                          <msub>
+                            <mi>q</mi>
+                            <mrow>
+                              <mi mathvariant="normal">a</mi>
+                              <mi mathvariant="normal">c</mi>
+                              <mi mathvariant="normal">c</mi>
+                            </mrow>
+                          </msub>
+                        </mrow>
+                      </munder>
+                      <msup>
+                        <mrow>
+                          <mo stretchy="true" form="prefix">|</mo>
+                          <msub>
+                            <mi>α</mi>
+                            <mi>C</mi>
+                          </msub>
+                          <mo stretchy="true" form="postfix">|</mo>
+                        </mrow>
+                        <mn>2</mn>
+                      </msup>
+                      <mo>,</mo>
+                    </mrow>
+                    <annotation encoding="application/x-tex">\Pr[M\text{ accepts
+                      }x]=\sum_{C:\,q(C)=q_{\mathrm{acc}}}|\alpha_C|^2,</annotation>
+                  </semantics>
+                </math></p>
+              <p>where q(C) denotes the internal state of C.</p>
+              <p>In this model, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mi>q</mi>
+                      <mrow>
+                        <mi mathvariant="normal">a</mi>
+                        <mi mathvariant="normal">c</mi>
+                        <mi mathvariant="normal">c</mi>
+                      </mrow>
+                    </msub>
+                    <annotation encoding="application/x-tex">q_{\mathrm{acc}}</annotation>
+                  </semantics>
+                </math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mi>q</mi>
+                      <mrow>
+                        <mi mathvariant="normal">r</mi>
+                        <mi mathvariant="normal">e</mi>
+                        <mi mathvariant="normal">j</mi>
+                      </mrow>
+                    </msub>
+                    <annotation encoding="application/x-tex">q_{\mathrm{rej}}</annotation>
+                  </semantics>
+                </math> are not sink states as they are in the usual classical model. During the computation, the
+                probability of observing the accepting state can therefore decrease.</p>
+              <h3 id="quantum-tm-running-time">Quantum TM running time</h3>
+              <p>Naturally, we can define the running time of a quantum Turing machine by counting how many times it
+                applies its transition rule. In our fixed-time model, the algorithm specifies a function T : N → N. On
+                every input x of length n, the machine takes exactly T(n) steps, measures its internal state, and halts.
+                Each application of the transition rule counts as one step, even when the machine is in a superposition
+                of many configurations.</p>
+              <div class="definition">
+                <p><strong>Definition (Bounded-error quantum time)</strong></p>
+                <p>A language L belongs to BQTIME(f(n)) if there exists a quantum Turing machine M that runs in time
+                  T(n) = O(f(n)) and decides L with bounded error. That is, for every input x,</p>
+                <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow>
+                        <mi>x</mi>
+                        <mo>∈</mo>
+                        <mi>L</mi>
+                        <mo>⟹</mo>
+                        <mo>Pr</mo>
+                        <mrow>
+                          <mo stretchy="true" form="prefix">[</mo>
+                          <mi>M</mi>
+                          <mrow>
+                            <mspace width="0.333em"></mspace>
+                            <mtext mathvariant="normal"> accepts </mtext>
+                            <mspace width="0.333em"></mspace>
+                          </mrow>
+                          <mi>x</mi>
+                          <mo stretchy="true" form="postfix">]</mo>
+                        </mrow>
+                        <mo>≥</mo>
+                        <mfrac displaystyle="false">
+                          <mn>2</mn>
+                          <mn>3</mn>
+                        </mfrac>
+                        <mo>,</mo>
+                        <mspace width="2.0em"></mspace>
+                        <mi>x</mi>
+                        <mo>∉</mo>
+                        <mi>L</mi>
+                        <mo>⟹</mo>
+                        <mo>Pr</mo>
+                        <mrow>
+                          <mo stretchy="true" form="prefix">[</mo>
+                          <mi>M</mi>
+                          <mrow>
+                            <mspace width="0.333em"></mspace>
+                            <mtext mathvariant="normal"> accepts </mtext>
+                            <mspace width="0.333em"></mspace>
+                          </mrow>
+                          <mi>x</mi>
+                          <mo stretchy="true" form="postfix">]</mo>
+                        </mrow>
+                        <mo>≤</mo>
+                        <mfrac displaystyle="false">
+                          <mn>1</mn>
+                          <mn>3</mn>
+                        </mfrac>
+                        <mi>.</mi>
+                      </mrow>
+                      <annotation encoding="application/x-tex">x\in L\implies \Pr[M\text{ accepts }x]\ge\tfrac23,\qquad
+                        x\notin L\implies\Pr[M\text{ accepts }x]\le\tfrac13.</annotation>
+                    </semantics>
+                  </math></p>
+                <p>Here the time bound includes the cost of keeping track of when to measure.</p>
+              </div>
+              <p>The polynomial-time version of BQTIME coincides with the circuit-based class BQP defined earlier. We
+                explain this equivalence in chapter 4.</p>
+              <div class="definition">
+                <p><strong>Definition (BQP via quantum Turing machines)</strong></p>
+                <p>BQP is the class of languages that a quantum Turing machine can decide in polynomial time with
+                  bounded error. Equivalently,</p>
+                <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow>
+                        <mrow>
+                          <mi mathvariant="normal">B</mi>
+                          <mi mathvariant="normal">Q</mi>
+                          <mi mathvariant="normal">P</mi>
+                        </mrow>
+                        <mo>=</mo>
+                        <munderover>
+                          <mo>⋃</mo>
+                          <mrow>
+                            <mi>k</mi>
+                            <mo>=</mo>
+                            <mn>1</mn>
+                          </mrow>
+                          <mo accent="false">∞</mo>
+                        </munderover>
+                        <mrow>
+                          <mi mathvariant="normal">B</mi>
+                          <mi mathvariant="normal">Q</mi>
+                          <mi mathvariant="normal">T</mi>
+                          <mi mathvariant="normal">I</mi>
+                          <mi mathvariant="normal">M</mi>
+                          <mi mathvariant="normal">E</mi>
+                        </mrow>
+                        <mrow>
+                          <mo stretchy="true" form="prefix">(</mo>
+                          <msup>
+                            <mi>n</mi>
+                            <mi>k</mi>
+                          </msup>
+                          <mo stretchy="true" form="postfix">)</mo>
+                        </mrow>
+                        <mi>.</mi>
+                      </mrow>
+                      <annotation encoding="application/x-tex">\mathrm{BQP}=\bigcup_{k=1}^\infty\mathrm{BQTIME}(n^k).
+                      </annotation>
+                    </semantics>
+                  </math></p>
+              </div>
+            </section>
+          </li>
+          <li>
+            <section id="equivalence-and-bqp" aria-labelledby="bqp-title">
+              <h2 id="bqp-title"><a href="#equivalence-and-bqp">Model equivalence &amp; BQP</a></h2>
+              <p>The equivalence of the two definitions of BQP, denoted <math display="inline"
+                  xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mrow>
+                        <mi mathvariant="normal">B</mi>
+                        <mi mathvariant="normal">Q</mi>
+                        <mi mathvariant="normal">P</mi>
+                      </mrow>
+                      <mrow>
+                        <mi mathvariant="normal">G</mi>
+                        <mi mathvariant="normal">a</mi>
+                        <mi mathvariant="normal">t</mi>
+                        <mi mathvariant="normal">e</mi>
+                      </mrow>
+                    </msub>
+                    <annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{Gate}}</annotation>
+                  </semantics>
+                </math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mrow>
+                        <mi mathvariant="normal">B</mi>
+                        <mi mathvariant="normal">Q</mi>
+                        <mi mathvariant="normal">P</mi>
+                      </mrow>
+                      <mrow>
+                        <mi mathvariant="normal">T</mi>
+                        <mi mathvariant="normal">M</mi>
+                      </mrow>
+                    </msub>
+                    <annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{TM}}</annotation>
+                  </semantics>
+                </math> in this chapter, is not immediate. We sketch both inclusions below. </p>
+              <h3 id="mathrmbqp_mathrmgate-mathrmbqp_mathrmtm">1. Simulating quantum circuits with a quantum Turing
+                machine</h3>
+              <p><strong>Inclusion to prove:</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mrow>
+                        <mi mathvariant="normal">B</mi>
+                        <mi mathvariant="normal">Q</mi>
+                        <mi mathvariant="normal">P</mi>
+                      </mrow>
+                      <mrow>
+                        <mi mathvariant="normal">G</mi>
+                        <mi mathvariant="normal">a</mi>
+                        <mi mathvariant="normal">t</mi>
+                        <mi mathvariant="normal">e</mi>
+                      </mrow>
+                    </msub>
+                    <annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{Gate}}</annotation>
+                  </semantics>
+                </math> ⊆ <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mrow>
+                        <mi mathvariant="normal">B</mi>
+                        <mi mathvariant="normal">Q</mi>
+                        <mi mathvariant="normal">P</mi>
+                      </mrow>
+                      <mrow>
+                        <mi mathvariant="normal">T</mi>
+                        <mi mathvariant="normal">M</mi>
+                      </mrow>
+                    </msub>
+                    <annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{TM}}</annotation>
+                  </semantics>
+                </math>.</p>
+              <p>Let L be a language such that L ∈ <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mrow>
+                        <mi mathvariant="normal">B</mi>
+                        <mi mathvariant="normal">Q</mi>
+                        <mi mathvariant="normal">P</mi>
+                      </mrow>
+                      <mrow>
+                        <mi mathvariant="normal">G</mi>
+                        <mi mathvariant="normal">a</mi>
+                        <mi mathvariant="normal">t</mi>
+                        <mi mathvariant="normal">e</mi>
+                      </mrow>
+                    </msub>
+                    <annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{Gate}}</annotation>
+                  </semantics>
+                </math>. We therefore know we can create the quantum circuit that solves L in polynomial time with
+                bounded error since <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mrow>
+                        <mi mathvariant="normal">B</mi>
+                        <mi mathvariant="normal">Q</mi>
+                        <mi mathvariant="normal">P</mi>
+                      </mrow>
+                      <mrow>
+                        <mi mathvariant="normal">G</mi>
+                        <mi mathvariant="normal">a</mi>
+                        <mi mathvariant="normal">t</mi>
+                        <mi mathvariant="normal">e</mi>
+                      </mrow>
+                    </msub>
+                    <annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{Gate}}</annotation>
+                  </semantics>
+                </math> covers polynomial-time uniform circuits. Now our QTM can first create the circuit in polynomial
+                time. Then it can create a scratchpad with the input and work qubits and simulate the circuit. Applying
+                a quantum gate takes at most linear time in the number of qubits, which is polynomial in the input
+                length. We scan the tape to locate the required qubits and apply the corresponding operation—keeping the
+                tape-head trajectory synchronized across all superposition branches so that configurations with the same
+                wire contents interfere properly. H and T act directly on a single qubit. For CNOT we can have the TM
+                coherently enter one of two internal states depending on the value of the control qubit, modify the
+                target bit differently depending on which of the two states it is in, and then uncompute the temporary
+                copy of the control.</p>
+              <p>Circuit evaluation takes polynomial time because there are polynomially many gates and each takes
+                polynomial time to simulate. The simulation preserves the circuit’s bounded-error guarantee, so L ∈
+                <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mrow>
+                        <mi mathvariant="normal">B</mi>
+                        <mi mathvariant="normal">Q</mi>
+                        <mi mathvariant="normal">P</mi>
+                      </mrow>
+                      <mrow>
+                        <mi mathvariant="normal">T</mi>
+                        <mi mathvariant="normal">M</mi>
+                      </mrow>
+                    </msub>
+                    <annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{TM}}</annotation>
+                  </semantics>
+                </math>.
+              </p>
+              <h3 id="mathrmbqp_mathrmtm-mathrmbqp_mathrmgate">2. Simulating a quantum Turing machine with quantum
+                circuits</h3>
+              <p><strong>Inclusion to prove:</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mrow>
+                        <mi mathvariant="normal">B</mi>
+                        <mi mathvariant="normal">Q</mi>
+                        <mi mathvariant="normal">P</mi>
+                      </mrow>
+                      <mrow>
+                        <mi mathvariant="normal">T</mi>
+                        <mi mathvariant="normal">M</mi>
+                      </mrow>
+                    </msub>
+                    <annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{TM}}</annotation>
+                  </semantics>
+                </math> ⊆ <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mrow>
+                        <mi mathvariant="normal">B</mi>
+                        <mi mathvariant="normal">Q</mi>
+                        <mi mathvariant="normal">P</mi>
+                      </mrow>
+                      <mrow>
+                        <mi mathvariant="normal">G</mi>
+                        <mi mathvariant="normal">a</mi>
+                        <mi mathvariant="normal">t</mi>
+                        <mi mathvariant="normal">e</mi>
+                      </mrow>
+                    </msub>
+                    <annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{Gate}}</annotation>
+                  </semantics>
+                </math>.</p>
+              <p>We give a sketch rather than the full proof. Let L be a language such that L ∈ <math display="inline"
+                  xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mrow>
+                        <mi mathvariant="normal">B</mi>
+                        <mi mathvariant="normal">Q</mi>
+                        <mi mathvariant="normal">P</mi>
+                      </mrow>
+                      <mrow>
+                        <mi mathvariant="normal">T</mi>
+                        <mi mathvariant="normal">M</mi>
+                      </mrow>
+                    </msub>
+                    <annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{TM}}</annotation>
+                  </semantics>
+                </math>, so it has a polynomial time bound T(n). We can boost the QTM so that its success probability is
+                at least 3/4. To simulate it with a
+                uniform quantum circuit family, we represent the tape and head position across the O(n + T(n)) reachable
+                cells using registers of qubits, analogous to a classical TM tableau. Because each QTM transition only
+                modifies the cell under the head and moves the head by at most one position, one global QTM step can be
+                decomposed into a polynomial number of local unitary operators acting on constant-size windows of
+                adjacent cells (preserving unitarity without copying quantum states). Unlike in the classical case,
+                these local unitaries can have arbitrary complex entries that cannot be realized exactly by finitely
+                many {H, T, CNOT} gates. However, if there are M = poly(n) local unitary blocks in total, we can
+                approximate each block to error O(1/M) using polylog(M) = polylog(n) gates from {H, T, CNOT} via the <a
+                  href="https://en.wikipedia.org/wiki/Solovay–Kitaev_theorem">Solovay–Kitaev theorem</a>. Summing the
+                errors across all M blocks changes the final acceptance probability by less than 1/12, keeping it at
+                least 2/3 (or at most 1/3) in polynomial circuit size. Thus L ∈ <math display="inline"
+                  xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mrow>
+                        <mi mathvariant="normal">B</mi>
+                        <mi mathvariant="normal">Q</mi>
+                        <mi mathvariant="normal">P</mi>
+                      </mrow>
+                      <mrow>
+                        <mi mathvariant="normal">G</mi>
+                        <mi mathvariant="normal">a</mi>
+                        <mi mathvariant="normal">t</mi>
+                        <mi mathvariant="normal">e</mi>
+                      </mrow>
+                    </msub>
+                    <annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{Gate}}</annotation>
+                  </semantics>
+                </math>.</p>
+              <p>Combining the two inclusions gives <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mrow>
+                        <mi mathvariant="normal">B</mi>
+                        <mi mathvariant="normal">Q</mi>
+                        <mi mathvariant="normal">P</mi>
+                      </mrow>
+                      <mrow>
+                        <mi mathvariant="normal">G</mi>
+                        <mi mathvariant="normal">a</mi>
+                        <mi mathvariant="normal">t</mi>
+                        <mi mathvariant="normal">e</mi>
+                      </mrow>
+                    </msub>
+                    <annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{Gate}}</annotation>
+                  </semantics>
+                </math> = <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mrow>
+                        <mi mathvariant="normal">B</mi>
+                        <mi mathvariant="normal">Q</mi>
+                        <mi mathvariant="normal">P</mi>
+                      </mrow>
+                      <mrow>
+                        <mi mathvariant="normal">T</mi>
+                        <mi mathvariant="normal">M</mi>
+                      </mrow>
+                    </msub>
+                    <annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{TM}}</annotation>
+                  </semantics>
+                </math>.</p>
+            </section>
+          </li>
+          <li>
+            <section id="complexity-landscape" aria-labelledby="landscape-title">
+              <h2 id="landscape-title"><a href="#complexity-landscape">BQP in the complexity landscape</a></h2>
+              <p>We now examine how BQP fits into the complexity hierarchy and what this tells us about the power of
+                efficient quantum computation.</p>
+              <figure class="containment">
+                <div>
+                  P ⊆ BPP ⊆ BQP ⊆ PSPACE
+                </div>
+                <figcaption>
+                  Read from left to right. Each inclusion is proved. The chain makes no claim that adjacent classes
+                  differ.
+                </figcaption>
+              </figure>
+              <h3 id="p-bpp-bqp">P ⊆ BPP ⊆ BQP</h3>
+              <p>It suffices to show that BPP ⊆ BQP. Let L ∈ BPP. There is a randomized algorithm with a polynomial time
+                bound T(n) whose success probability, over its random choices, is at least 2/3 for every input x. To
+                simulate this algorithm, a quantum circuit (or QTM) prepares an equal superposition <math
+                  display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow>
+                      <mi>H</mi>
+                      <mrow>
+                        <mo stretchy="true" form="prefix">|</mo>
+                        <mn>0</mn>
+                        <mo stretchy="true" form="postfix">⟩</mo>
+                      </mrow>
+                      <mo>=</mo>
+                      <mrow>
+                        <mo stretchy="true" form="prefix">(</mo>
+                        <mrow>
+                          <mo stretchy="true" form="prefix">|</mo>
+                          <mn>0</mn>
+                          <mo stretchy="true" form="postfix">⟩</mo>
+                        </mrow>
+                        <mo>+</mo>
+                        <mrow>
+                          <mo stretchy="true" form="prefix">|</mo>
+                          <mn>1</mn>
+                          <mo stretchy="true" form="postfix">⟩</mo>
+                        </mrow>
+                        <mo stretchy="true" form="postfix">)</mo>
+                      </mrow>
+                      <mi>/</mi>
+                      <msqrt>
+                        <mn>2</mn>
+                      </msqrt>
+                    </mrow>
+                    <annotation encoding="application/x-tex">H\left\lvert 0\right\rangle=(\left\lvert
+                      0\right\rangle+\left\lvert 1\right\rangle)/\sqrt{2}</annotation>
+                  </semantics>
+                </math> for each random coin flip, keeping each random bit on a fresh ancilla wire so different random
+                choices never interfere. After simulating T(n) steps reversibly, we measure the output. The success
+                probability is still at least 2/3, so L ∈ BQP.
+              </p>
+              <h3 id="bqp-pspace">BQP ⊆ PSPACE</h3>
+              <p>While it might be immediately clear that BQP ⊆ EXP since one could just keep track of every possible
+                configuration’s amplitude and perform updates (this is one way people simulate quantum computers in the
+                real world), it might be surprising to see that BQP ⊆ PSPACE. The idea is that we compute one amplitude
+                at a time by working backward through the circuit.</p>
+              <p>Let L ∈ BQP. Given an input x, we know that in polynomial time we can generate a circuit of polynomial
+                size <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mi>C</mi>
+                      <mrow>
+                        <mo stretchy="true" form="prefix">|</mo>
+                        <mi>x</mi>
+                        <mo stretchy="true" form="postfix">|</mo>
+                      </mrow>
+                    </msub>
+                    <annotation encoding="application/x-tex">C_{|x|}</annotation>
+                  </semantics>
+                </math>. Suppose the circuit has q qubits and applies the gates G₁,…, Gₘ in order, where q and m are
+                polynomially bounded in the input length. Let A(i, y) be the amplitude of the basis state |y⟩ after the
+                first i gates. We will compute one amplitude at a time by working backward through the circuit.</p>
+              <p>Suppose we want to compute A(i, y). Write <math display="inline"
+                  xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mi>U</mi>
+                      <mi>i</mi>
+                    </msub>
+                    <annotation encoding="application/x-tex">U_i</annotation>
+                  </semantics>
+                </math> for the matrix of gate <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mi>G</mi>
+                      <mi>i</mi>
+                    </msub>
+                    <annotation encoding="application/x-tex">G_i</annotation>
+                  </semantics>
+                </math>. Since Uᵢ is unitary, its inverse is Uᵢ†. Apply this inverse gate to the basis state whose
+                amplitude we want:</p>
+              <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow>
+                      <msubsup>
+                        <mi>U</mi>
+                        <mi>i</mi>
+                        <mo>†</mo>
+                      </msubsup>
+                      <mrow>
+                        <mo stretchy="true" form="prefix">|</mo>
+                        <mi>y</mi>
+                        <mo stretchy="true" form="postfix">⟩</mo>
+                      </mrow>
+                      <mo>=</mo>
+                      <munder>
+                        <mo>∑</mo>
+                        <mi>z</mi>
+                      </munder>
+                      <msub>
+                        <mi>c</mi>
+                        <mi>z</mi>
+                      </msub>
+                      <mrow>
+                        <mo stretchy="true" form="prefix">|</mo>
+                        <mi>z</mi>
+                        <mo stretchy="true" form="postfix">⟩</mo>
+                      </mrow>
+                      <mo>,</mo>
+                      <mspace width="2.0em"></mspace>
+                      <msub>
+                        <mi>c</mi>
+                        <mi>z</mi>
+                      </msub>
+                      <mo>=</mo>
+                      <mover>
+                        <msub>
+                          <mrow>
+                            <mo stretchy="true" form="prefix">(</mo>
+                            <msub>
+                              <mi>U</mi>
+                              <mi>i</mi>
+                            </msub>
+                            <mo stretchy="true" form="postfix">)</mo>
+                          </mrow>
+                          <mrow>
+                            <mi>y</mi>
+                            <mo>,</mo>
+                            <mi>z</mi>
+                          </mrow>
+                        </msub>
+                        <mo accent="true">¯</mo>
+                      </mover>
+                      <mi>.</mi>
+                    </mrow>
+                    <annotation encoding="application/x-tex">U_i^\dagger\left\lvert y\right\rangle=\sum_z c_z\left\lvert
+                      z\right\rangle,\qquad c_z=\overline{(U_i)_{y,z}}.</annotation>
+                  </semantics>
+                </math></p>
+              <p>Thus each nonzero <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <msub>
+                      <mi>c</mi>
+                      <mi>z</mi>
+                    </msub>
+                    <annotation encoding="application/x-tex">c_z</annotation>
+                  </semantics>
+                </math> identifies a basis state |z⟩ that can contribute to |y⟩ through the forward gate Uᵢ. Its
+                contribution is its previous amplitude A(i − 1, z) multiplied by the forward transition amplitude <math
+                  display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow>
+                      <msub>
+                        <mrow>
+                          <mo stretchy="true" form="prefix">(</mo>
+                          <msub>
+                            <mi>U</mi>
+                            <mi>i</mi>
+                          </msub>
+                          <mo stretchy="true" form="postfix">)</mo>
+                        </mrow>
+                        <mrow>
+                          <mi>y</mi>
+                          <mo>,</mo>
+                          <mi>z</mi>
+                        </mrow>
+                      </msub>
+                      <mo>=</mo>
+                      <mover>
+                        <msub>
+                          <mi>c</mi>
+                          <mi>z</mi>
+                        </msub>
+                        <mo accent="true">¯</mo>
+                      </mover>
+                    </mrow>
+                    <annotation encoding="application/x-tex">(U_i)_{y,z}=\overline{c_z}</annotation>
+                  </semantics>
+                </math>. Summing these contributions gives</p>
+              <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow>
+                      <mi>A</mi>
+                      <mrow>
+                        <mo stretchy="true" form="prefix">(</mo>
+                        <mi>i</mi>
+                        <mo>,</mo>
+                        <mi>y</mi>
+                        <mo stretchy="true" form="postfix">)</mo>
+                      </mrow>
+                      <mo>=</mo>
+                      <munder>
+                        <mo>∑</mo>
+                        <mi>z</mi>
+                      </munder>
+                      <msub>
+                        <mrow>
+                          <mo stretchy="true" form="prefix">(</mo>
+                          <msub>
+                            <mi>U</mi>
+                            <mi>i</mi>
+                          </msub>
+                          <mo stretchy="true" form="postfix">)</mo>
+                        </mrow>
+                        <mrow>
+                          <mi>y</mi>
+                          <mo>,</mo>
+                          <mi>z</mi>
+                        </mrow>
+                      </msub>
+                      <mi>A</mi>
+                      <mrow>
+                        <mo stretchy="true" form="prefix">(</mo>
+                        <mi>i</mi>
+                        <mo>−</mo>
+                        <mn>1</mn>
+                        <mo>,</mo>
+                        <mi>z</mi>
+                        <mo stretchy="true" form="postfix">)</mo>
+                      </mrow>
+                      <mo>=</mo>
+                      <munder>
+                        <mo>∑</mo>
+                        <mrow>
+                          <mi>z</mi>
+                          <mo>:</mo>
+                          <msub>
+                            <mi>c</mi>
+                            <mi>z</mi>
+                          </msub>
+                          <mo>≠</mo>
+                          <mn>0</mn>
+                        </mrow>
+                      </munder>
+                      <mover>
+                        <msub>
+                          <mi>c</mi>
+                          <mi>z</mi>
+                        </msub>
+                        <mo accent="true">¯</mo>
+                      </mover>
+                      <mi>A</mi>
+                      <mrow>
+                        <mo stretchy="true" form="prefix">(</mo>
+                        <mi>i</mi>
+                        <mo>−</mo>
+                        <mn>1</mn>
+                        <mo>,</mo>
+                        <mi>z</mi>
+                        <mo stretchy="true" form="postfix">)</mo>
+                      </mrow>
+                      <mi>.</mi>
+                    </mrow>
+                    <annotation encoding="application/x-tex">A(i,y)=\sum_z
+                      (U_i)_{y,z}A(i-1,z)=\sum_{z:c_z\ne0}\overline{c_z}A(i-1,z).</annotation>
+                  </semantics>
+                </math></p>
+              <details open>
+                <summary>This gives the following recursive algorithm.</summary>
+                <pre class="text"><code>Amplitude(i, y):
     if i == 0:
         return 1 if y equals the initial basis string, else 0
 
@@ -133,18 +1035,66 @@ Decide(x):
     for each q-bit string y whose output bit is 1:
         accept_probability += |Amplitude(m, y)|^2
     return accept_probability &gt; 1/2</code></pre>
-<p>Why does this use polynomial space? Each gate acts on at most two qubits, so to list the terms of Uᵢ† |y⟩ we only need to inspect a matrix of size at most 4 × 4. All other bits of y stay fixed. We evaluate the recursive calls one at a time and reuse their workspace. Thus, even if the recursion makes exponentially many calls in total, at most m + 1 calls are active at once. Each active call stores a q-bit string, a gate index, and a running sum.</p>
-<p>It remains to account for the space needed by the numbers themselves. For our gate set {H, T, CNOT}, let ω = <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>e</mi><mrow><mi>i</mi><mi>π</mi><mi>/</mi><mn>4</mn></mrow></msup><annotation encoding="application/x-tex">e^{i\pi/4}</annotation></semantics></math>. After h Hadamard gates, each amplitude is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mrow><mi>−</mi><mi>h</mi><mi>/</mi><mn>2</mn></mrow></msup><annotation encoding="application/x-tex">2^{-h/2}</annotation></semantics></math> times a sum of at most 2ʰ powers of ω. Since ω⁸ = 1, we can store this sum exactly by counting how many times each of the eight powers occurs. Each count takes only O(h + 1) bits. The squared amplitudes all have the same denominator 2ʰ at the final layer, and summing over at most <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mi>q</mi></msup><annotation encoding="application/x-tex">2^q</annotation></semantics></math> output strings adds at most q bits to the size of their integer coefficients. Thus the running sums also fit in polynomial space.</p>
-<p>Finally, the bounded-error guarantee tells us that the acceptance probability is at least 2/3 if x ∈ L and at most 1/3 otherwise. Comparing it with 1/2 therefore decides L in polynomial space. Hence BQP ⊆ PSPACE.</p>
-</details>
-<h3 id="bqp-versus-np">BQP versus NP</h3>
-<p>It is not currently known but it is conjectured that NP and BQP are not comparable. It is conjectured that SAT ∉ BQP.</p>
-</section></li>
-      </ol>
-        <nav class="reading-nav" aria-label="Continue reading"><a href="index.html">← Foundations &amp; circuits</a><a class="next" href="algorithm-and-references.html">Algorithm &amp; references →</a></nav>
+                <p>Why does this use polynomial space? Each gate acts on at most two qubits, so to list the terms of Uᵢ†
+                  |y⟩ we only need to inspect a matrix of size at most 4 × 4. All other bits of y stay fixed. We
+                  evaluate the recursive calls one at a time and reuse their workspace. Thus, even if the recursion
+                  makes exponentially many calls in total, at most m + 1 calls are active at once. Each active call
+                  stores a q-bit string, a gate index, and a running sum.</p>
+                <p>It remains to account for the space needed by the numbers themselves. For our gate set {H, T, CNOT},
+                  let ω = <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <msup>
+                        <mi>e</mi>
+                        <mrow>
+                          <mi>i</mi>
+                          <mi>π</mi>
+                          <mi>/</mi>
+                          <mn>4</mn>
+                        </mrow>
+                      </msup>
+                      <annotation encoding="application/x-tex">e^{i\pi/4}</annotation>
+                    </semantics>
+                  </math>. After h Hadamard gates, each amplitude is <math display="inline"
+                    xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <msup>
+                        <mn>2</mn>
+                        <mrow>
+                          <mi>−</mi>
+                          <mi>h</mi>
+                          <mi>/</mi>
+                          <mn>2</mn>
+                        </mrow>
+                      </msup>
+                      <annotation encoding="application/x-tex">2^{-h/2}</annotation>
+                    </semantics>
+                  </math> times a sum of at most 2ʰ powers of ω. Since ω⁸ = 1 (and −1 = ω⁴, so every computational path
+                  contributes a single power of ω), we can store this sum exactly by counting how many times each of the
+                  eight powers occurs. Each non-negative count takes only O(h + 1) bits. The squared amplitudes all have
+                  the same denominator 2ʰ at the final layer, and summing over at most <math display="inline"
+                    xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <msup>
+                        <mn>2</mn>
+                        <mi>q</mi>
+                      </msup>
+                      <annotation encoding="application/x-tex">2^q</annotation>
+                    </semantics>
+                  </math> output strings adds at most q bits to the size of their integer coefficients. Thus the running
+                  sums also fit in polynomial space.</p>
+              </details>
+              <h3 id="bqp-versus-np">BQP versus NP</h3>
+              <p>The relationship between NP and BQP remains unresolved. They are conjectured to be incomparable; in
+                particular, SAT is conjectured not to belong to BQP.</p>
+            </section>
+          </li>
+        </ol>
+        <nav class="reading-nav" aria-label="Continue reading"><a href="index.html">← Foundations &amp; circuits</a><a
+            class="next" href="algorithm-and-references.html">Algorithm &amp; references →</a></nav>
       </div>
     </main>
     <footer>Ayush Garg · Quantum Computation &amp; Complexity <a href="#">Back to top ↑</a></footer>
   </div>
 </body>
+
 </html>
