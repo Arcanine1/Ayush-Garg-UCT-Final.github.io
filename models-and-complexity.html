@@ -607,7 +607,7 @@
                 length. We scan the tape to locate the required qubits and apply the corresponding operation—keeping the
                 tape-head trajectory synchronized across all superposition branches so that configurations with the same
                 wire contents interfere properly. H and T act directly on a single qubit. For CNOT we can have the TM
-                coherently enter one of two internal states depending on the value of the control qubit, modify the
+                simultaneously enter one of two internal states depending on the value of the control qubit, modify the
                 target bit differently depending on which of the two states it is in, and then uncompute the temporary
                 copy of the control.</p>
               <p>Circuit evaluation takes polynomial time because there are polynomially many gates and each takes
@@ -664,8 +664,9 @@
                     <annotation encoding="application/x-tex">\mathrm{BQP}_{\mathrm{Gate}}</annotation>
                   </semantics>
                 </math>.</p>
-              <p>We give a sketch rather than the full proof. Let L be a language such that L ∈ <math display="inline"
-                  xmlns="http://www.w3.org/1998/Math/MathML">
+              <p>This proof is nearly identical to efficient TM to circuit
+                and we in fact we will use the same kind of grid.
+                Let L be a language such that L ∈ <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
                   <semantics>
                     <msub>
                       <mrow>
@@ -682,12 +683,15 @@
                   </semantics>
                 </math>, so it has a polynomial time bound T(n). We can boost the QTM so that its success probability is
                 at least 3/4. To simulate it with a
-                uniform quantum circuit family, we represent the tape and head position across the O(n + T(n)) reachable
-                cells using registers of qubits, analogous to a classical TM tableau. Because each QTM transition only
+                uniform quantum circuit family, we represent the tape and head position across the n + T(n) reachable
+                cells using registers of qubits which contain a state option and work tape character. Because each QTM
+                transition only
                 modifies the cell under the head and moves the head by at most one position, one global QTM step can be
                 decomposed into a polynomial number of local unitary operators acting on constant-size windows of
-                adjacent cells (preserving unitarity without copying quantum states). Unlike in the classical case,
-                these local unitaries can have arbitrary complex entries that cannot be realized exactly by finitely
+                adjacent cells (preserving unitarity without copying quantum states). We also only have a grid of size
+                T(n) * (n + T(n)) so our number of transition gates is also polynomial.
+                Unlike in the classical case,
+                transfer function can have arbitrary complex entries that cannot be realized exactly by finitely
                 many {H, T, CNOT} gates. However, if there are M = poly(n) local unitary blocks in total, we can
                 approximate each block to error O(1/M) using polylog(M) = polylog(n) gates from {H, T, CNOT} via the <a
                   href="https://en.wikipedia.org/wiki/Solovay–Kitaev_theorem">Solovay–Kitaev theorem</a>. Summing the
@@ -839,8 +843,11 @@
                     </msub>
                     <annotation encoding="application/x-tex">G_i</annotation>
                   </semantics>
-                </math>. Since Uᵢ is unitary, its inverse is Uᵢ†. Apply this inverse gate to the basis state whose
-                amplitude we want:</p>
+                </math>. Here y is the output basis string whose amplitude we want after gate i, and z ranges over
+                the q-bit basis strings immediately before gate i. We write Uᵢ† for the conjugate transpose of Uᵢ,
+                obtained by transposing the matrix and taking the complex conjugate of each entry. Because the gate
+                is unitary, Uᵢ† = Uᵢ⁻¹. Apply this inverse gate to |y⟩ to identify the preceding basis states
+                that can contribute to its amplitude:</p>
               <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
                   <semantics>
                     <mrow>
@@ -1035,26 +1042,13 @@ Decide(x):
     for each q-bit string y whose output bit is 1:
         accept_probability += |Amplitude(m, y)|^2
     return accept_probability &gt; 1/2</code></pre>
-                <p>Why does this use polynomial space? Each gate acts on at most two qubits, so to list the terms of Uᵢ†
+                <p>We see that each gate acts on at most two qubits, so to list the terms of Uᵢ†
                   |y⟩ we only need to inspect a matrix of size at most 4 × 4. All other bits of y stay fixed. We
                   evaluate the recursive calls one at a time and reuse their workspace. Thus, even if the recursion
                   makes exponentially many calls in total, at most m + 1 calls are active at once. Each active call
                   stores a q-bit string, a gate index, and a running sum.</p>
-                <p>It remains to account for the space needed by the numbers themselves. For our gate set {H, T, CNOT},
-                  let ω = <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
-                    <semantics>
-                      <msup>
-                        <mi>e</mi>
-                        <mrow>
-                          <mi>i</mi>
-                          <mi>π</mi>
-                          <mi>/</mi>
-                          <mn>4</mn>
-                        </mrow>
-                      </msup>
-                      <annotation encoding="application/x-tex">e^{i\pi/4}</annotation>
-                    </semantics>
-                  </math>. After h Hadamard gates, each amplitude is <math display="inline"
+                <p>It remains to account for the space needed by the numbers themselves.
+                  After h Hadamard gates, each amplitude is <math display="inline"
                     xmlns="http://www.w3.org/1998/Math/MathML">
                     <semantics>
                       <msup>
